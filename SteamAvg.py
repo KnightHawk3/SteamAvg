@@ -1,32 +1,35 @@
 #!/usr/bin/python
-import requests
-import json
 import os
+from celery.result import AsyncResult
+from flask import Flask
+from flask import redirect
+from flask import request
+from flask import render_template
+from tasks import show_avg_id
+from iron_celery import iron_cache_backend
 
-APIURL = 'http://api.steampowered.com'
-APIKEY = os.environ['STEAMAPI'] # Import api key from environment variables
+app = Flask(__name__)
+backend = iron_cache_backend.IronCacheBackend("ironcache://")
 
-steamid = 76561198025500278 # Melodys
-steamid = 76561198019392997 # LHC's
+@app.route("/")
+def home():
+    return render_template("index.html")
 
-def urlify(url):
-    url = url.replace(" ", "-")
-    url = url.strip(":")
-    return url.lower()
+@app.route('/queue', methods=['POST'])
+def runTask():
+    res = show_avg_id.delay(request.form['id'])
+    return redirect('/id/'+res.id)
 
-r = requests.get(APIURL + '/IPlayerService/GetOwnedGames/v0001/?key=' + APIKEY + '&steamid=' + str(steamid) + '&format=json&include_appinfo=1')
+@app.route('/id/<steamid>')
+def show_avg(steamid):
+    result = AsyncResult(steamid, backend=backend)
+    if result.ready():
+        return render_template('avg.html', avg=result.get())
+    elif result.failed():
+        return result.traceback
+    else:
+        return render_template('processing.html')
 
-data = json.loads(r.text)
 
-scores = []
-
-for game in data['response']['games']:
-    gameurl = urlify(game['name'])
-    try:
-        score = int(requests.get('http://www.metacritic.com/game/pc/' + gameurl ).text.split('<span itemprop="ratingValue">')[1].split('</span>')[0])
-        scores.append(score)
-    except IndexError:
-        pass
-
-print sum(scores)/len(scores)
-print  str(len(scores)) + " out of " + str(len(data['response']['games'])) + " results sampled."
+if __name__ == "__main__":
+    app.run(host='0.0.0.0')

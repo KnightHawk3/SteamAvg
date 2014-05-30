@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Steam Metascore Average</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+}
+.visuals {
+vertical-align: middle;
+text-align: center;
+}
+.visuals > img, .visuals > div {
+padding: 20px;
+}
+.dual-arrow > img {
+padding: 5px;
+}
+.celery-viz, .dual-arrow {
+display: inline-block;
+vertical-align: middle;
+}
+    </style>
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/">Steam Average</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="/">Home</a></li>
+              <li><a href="https://github.com/iron-io/heroku-iron-celery-demo">Source</a></li>
+              <li><a href="http://devcenter.heroku.com/articles/iron-celery">Tutorial</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+<div class="hero-unit">
+<h1>Fetching the Average...</h1>
+<div class="visuals">
+<img src="/static/img/heroku.png" alt="Heroku" />
+<img src="/static/img/arrow_right.png" alt="arrow right" />
+<div class="celery-viz">
+<img src="/static/img/celery.png" alt="Celery" /><br />
+<img src="/static/img/ajax-loader.gif" alt="throbber" />
+</div>
+<div class="dual-arrow">
+<img src="/static/img/arrow_right.png" alt="arrow right" /><br />
+<img src="/static/img/arrow_left.png" alt="arrow left" />
+</div>
+<img src="/static/img/iron.png" alt="Iron.io" />
+</div>
+      </div>
+
+    </div> <!-- /container -->
+
+    <script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script>
+$(document).ready(function() {
+var secs = 5;
+setInterval(function() {
+if(secs <= 1) {
+location.reload();
+} else {
+secs = secs - 1;
+}
+}, 1000);
+});
+</script>
+  </body>
+</html>

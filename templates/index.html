@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Feedreader Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+}
+#urlWarning {
+display: none;
+}
+    </style>
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/">Feedreader</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="/">Home</a></li>
+              <li><a href="https://github.com/iron-io/heroku-iron-celery-demo">Source</a></li>
+              <li><a href="http://devcenter.heroku.com/articles/iron-celery">Tutorial</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="hero-unit">
+        <h1>Enter a STEAMID</h1>
+<p>Input a STEAMID to find out the metacritic average of the game library.</p>
+<div class="input-append">
+<form action="/queue" method="POST" id="urlForm">
+   <input class="input-xxlarge" id="idInput" name="id" type="id" value="76561198019392997">
+<button class="btn" type="button" id="urlButton">Fetch</button>
+</form>
+</div>
+<p id="idWarning">Please enter the ID for the feed you wish to fetch.</p>
+<h3>Sample Feeds</h3>
+<ul>
+<li><a href="http://blog.iron.io/feeds/posts/default" class="sample-feed">Iron.io Blog</a></li>
+<li><a href="http://news.ycombinator.com/rss" class="sample-feed">Hacker News</a></li>
+<li><a href="http://feeds2.feedburner.com/heroku" class="sample-feed">Heroku Blog</a></li>
+</ul>
+      </div>
+
+    </div> <!-- /container -->
+
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+<script>
+$(document).ready(function(){
+$("#urlButton").click(function() {
+$("#urlForm").submit();
+});
+
+$("#urlForm").submit(function() {
+if ($("#urlInput").val() == "") {
+$("#urlWarning").show();
+return false;
+}
+return true;
+});
+
+$(".sample-feed").click(function(e) {
+e.preventDefault();
+$("#urlInput").val($(this).attr('href'));
+$("#urlForm").submit();
+});
+});
+</script>
+  </body>
+</html>
