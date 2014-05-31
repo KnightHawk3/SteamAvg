@@ -1,13 +1,15 @@
 from celery import Celery
 import iron_celery
 import json
+import requests
 import os
 import celery
 
-celery = Celery('tasks', broker='ironmq://', backend='ironcache://')
-
+IRONURL = os.environ['IRONURL']
 APIURL = 'http://api.steampowered.com'
 APIKEY = os.environ['STEAMAPI'] # Import api key from environment variables
+
+celery = Celery('tasks', broker='ironmq://'+IRONURL, backend='ironcache://'+IRONURL)
 
 def urlify(url):
     url = url.replace(" ", "-")
@@ -20,6 +22,7 @@ def show_avg_id(steamid):
     data = json.loads(r.text)
     scores = []
     for game in data['response']['games']:
+        print "working!"
         gameurl = urlify(game['name'])
         try:
             score = int(requests.get('http://www.metacritic.com/game/pc/' + gameurl ).text.split('<span itemprop="ratingValue">')[1].split('</span>')[0])
@@ -28,5 +31,5 @@ def show_avg_id(steamid):
             pass
     avg = sum(scores)/len(scores)
     outof =  str(len(scores)) + " out of " + str(len(data['response']['games'])) + " results sampled."
-    return avg + "<br>From " + outof
-
+    print "Done!"
+    return "The steam average is: " + str(avg) + "<br>" + outof
