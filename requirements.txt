@@ -7,6 +7,7 @@ anyjson==0.3.3
 argparse==1.2.1
 billiard==3.3.0.17
 celery==3.1.11
+gunicorn==18.0
 iron-cache==0.3.1
 iron-celery==0.4.1
 iron-core==1.1.1
